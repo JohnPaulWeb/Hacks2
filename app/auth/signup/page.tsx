@@ -44,7 +44,7 @@ export default function SignUpPage() {
       return
     }
 
-    if (!usernameAvailable) {
+    if (usernameAvailable === false) {
       setError('Username is not available')
       return
     }
@@ -131,7 +131,7 @@ export default function SignUpPage() {
 
             <Button
               type="submit"
-              disabled={loading || !usernameAvailable}
+              disabled={loading || usernameAvailable === false}
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               {loading ? 'Creating account...' : 'Sign Up'}

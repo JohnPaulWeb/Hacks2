@@ -28,15 +28,8 @@ export async function getTodayQuiz() {
 }
 
 export async function getTodayQuestions() {
-  const today = new Date().toISOString().split('T')[0]
-
-  const { data: quiz, error: quizError } = await supabase
-    .from('daily_quizzes')
-    .select('id')
-    .eq('quiz_date', today)
-    .single()
-
-  if (quizError) throw quizError
+  const quiz = await getTodayQuiz()
+  if (!quiz || !quiz.id) return []
 
   const { data: questions, error: questionsError } = await supabase
     .from('quiz_questions')
@@ -45,7 +38,7 @@ export async function getTodayQuestions() {
     .order('question_order', { ascending: true })
 
   if (questionsError) throw questionsError
-  return questions as Database['public']['Tables']['quiz_questions']['Row'][]
+  return (questions || []) as Database['public']['Tables']['quiz_questions']['Row'][]
 }
 
 export async function submitQuizAnswer(

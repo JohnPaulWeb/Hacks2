@@ -67,11 +67,21 @@ export async function updateUserProfile(userId: string, updates: any) {
 }
 
 export async function checkUsernameAvailable(username: string) {
-  const { data, error } = await supabase
-    .from('users')
-    .select('id')
-    .eq('username', username)
-    .single()
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('id')
+      .eq('username', username)
+      .maybeSingle()
 
-  return !data && !error
+    if (error) {
+      console.warn('Error checking username availability:', error)
+      return true
+    }
+
+    return !data
+  } catch (err) {
+    console.warn('Failed to check username availability:', err)
+    return true
+  }
 }
