@@ -21,11 +21,12 @@ export default function ArenaPage() {
   const [totalXp, setTotalXp] = useState(0)
 
   useEffect(() => {
-    if (!user) return
+    let isMounted = true
 
     const loadQuiz = async () => {
       try {
         const quizQuestions = await getTodayQuestions()
+        if (!isMounted) return
         setQuestions(quizQuestions)
 
         // Initialize answers
@@ -37,25 +38,31 @@ export default function ArenaPage() {
       } catch (err) {
         console.error('Failed to load quiz:', err)
       } finally {
-        setLoading(false)
+        if (isMounted) setLoading(false)
       }
     }
 
     loadQuiz()
+
+    return () => {
+      isMounted = false
+    }
   }, [user])
 
   const currentQuestion = questions[currentIndex]
 
   const handleAnswer = async (answer: 'human' | 'ai') => {
-    if (!user || !currentQuestion) return
+    if (!currentQuestion) return
 
     setSubmitting(true)
 
     try {
-      const result = await submitQuizAnswer(user.id, currentQuestion.id, answer)
+      const userId = user?.id || 'guest-user'
+      const result = await submitQuizAnswer(userId, currentQuestion.id, answer)
       const newAnswers = { ...answers, [currentQuestion.id]: answer }
       setAnswers(newAnswers)
-      setTotalXp((prev) => prev + result.xpEarned)
+      const newTotalXp = totalXp + (result?.xpEarned || 0)
+      setTotalXp(newTotalXp)
 
       if (currentIndex < questions.length - 1) {
         // Move to next question
@@ -67,26 +74,51 @@ export default function ArenaPage() {
         // Quiz complete
         await new Promise((resolve) => setTimeout(resolve, 500))
 
-        const { data: responses } = await supabase
-          .from('user_quiz_responses')
-          .select('is_correct, xp_earned, question_id')
-          .eq('user_id', user.id)
-          .eq('quiz_date', new Date().toISOString().split('T')[0])
+        let correct = 0
+        let total = questions.length
+        let xp = newTotalXp
 
-        if (responses) {
-          const correct = responses.filter((r) => r.is_correct).length
-          const total = responses.length
-          const xp = responses.reduce((sum, r) => sum + r.xp_earned, 0)
+        try {
+          if (user?.id) {
+            const { data: responses } = await supabase
+              .from('user_quiz_responses')
+              .select('is_correct, xp_earned, question_id')
+              .eq('user_id', user.id)
+              .eq('quiz_date', new Date().toISOString().split('T')[0])
 
-          setResults({
-            correct,
-            total,
-            accuracy: Math.round((correct / total) * 100),
-            xp,
-          })
+            if (responses && responses.length > 0) {
+              correct = responses.filter((r) => r.is_correct).length
+              total = responses.length
+              xp = responses.reduce((sum, r) => sum + r.xp_earned, 0)
+            } else {
+              correct = questions.filter((q) => {
+                const ans = q.id === currentQuestion.id ? answer : newAnswers[q.id]
+                return ans === (q as any).correct_answer
+              }).length
+            }
+          } else {
+            correct = questions.filter((q) => {
+              const ans = q.id === currentQuestion.id ? answer : newAnswers[q.id]
+              return ans === (q as any).correct_answer
+            }).length
+          }
+        } catch {
+          correct = questions.filter((q) => {
+            const ans = q.id === currentQuestion.id ? answer : newAnswers[q.id]
+            return ans === (q as any).correct_answer
+          }).length
+        }
 
-          // Update profile
-          if (profile) {
+        setResults({
+          correct,
+          total,
+          accuracy: total > 0 ? Math.round((correct / total) * 100) : 0,
+          xp,
+        })
+
+        // Update profile
+        if (user && profile) {
+          try {
             // Calculate streak
             const today = new Date()
             const yesterday = new Date(today)
@@ -119,6 +151,8 @@ export default function ArenaPage() {
               // Check and award badges
               await checkAndAwardBadges(user.id)
             }
+          } catch (profileErr) {
+            console.warn('Could not update profile stats:', profileErr)
           }
         }
 

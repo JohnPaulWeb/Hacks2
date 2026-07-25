@@ -3,8 +3,9 @@ import dotenv from 'dotenv'
 dotenv.config({ path: '.env.local' })
 dotenv.config()
 
-const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const supabaseKey = (serviceKey && serviceKey !== 'your-service-role-key' && serviceKey !== 'your_service_role_key') ? serviceKey : anonKey
 
 if (!rawUrl || !supabaseKey) {
   console.error('Missing Supabase environment variables')

@@ -7,6 +7,8 @@ import { useAuth } from '@/lib/auth-context'
 import { Button } from '@/components/ui/button'
 import { checkUsernameAvailable } from '@/lib/auth'
 
+
+// this is SignUpPage
 export default function SignUpPage() {
   const router = useRouter()
   const { signUp } = useAuth()
@@ -89,9 +91,8 @@ export default function SignUpPage() {
                 type="text"
                 value={username}
                 onChange={(e) => handleUsernameChange(e.target.value)}
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background text-foreground ${
-                  usernameAvailable === true ? 'border-green-500' : usernameAvailable === false ? 'border-destructive' : 'border-border'
-                }`}
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background text-foreground ${usernameAvailable === true ? 'border-green-500' : usernameAvailable === false ? 'border-destructive' : 'border-border'
+                  }`}
                 placeholder="your_username"
                 minLength={3}
                 required
@@ -134,6 +135,7 @@ export default function SignUpPage() {
               disabled={loading || usernameAvailable === false}
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
             >
+
               {loading ? 'Creating account...' : 'Sign Up'}
             </Button>
           </form>
