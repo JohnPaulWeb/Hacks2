@@ -6,9 +6,11 @@ import Link from 'next/link'
 import { useAuth } from '@/lib/auth-context'
 import { Button } from '@/components/ui/button'
 import { checkUsernameAvailable } from '@/lib/auth'
+import { AuthShell } from '@/components/auth-shell'
 
+const inputClassName =
+  'w-full rounded-lg border border-border bg-background/80 px-4 py-2.5 text-foreground shadow-sm transition placeholder:text-muted-foreground/70 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50'
 
-// this is SignUpPage
 export default function SignUpPage() {
   const router = useRouter()
   const { signUp } = useAuth()
@@ -64,92 +66,85 @@ export default function SignUpPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md">
-        <div className="bg-card rounded-lg shadow-lg p-8 border border-border">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-primary mb-2">Join Spot the Bot</h1>
-            <p className="text-muted-foreground">Start your AI detection journey</p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background text-foreground"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">Username</label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => handleUsernameChange(e.target.value)}
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background text-foreground ${usernameAvailable === true ? 'border-green-500' : usernameAvailable === false ? 'border-destructive' : 'border-border'
-                  }`}
-                placeholder="your_username"
-                minLength={3}
-                required
-              />
-              {checking && <p className="text-xs text-muted-foreground mt-1">Checking availability...</p>}
-              {usernameAvailable === true && <p className="text-xs text-green-500 mt-1">Username available!</p>}
-              {usernameAvailable === false && <p className="text-xs text-destructive mt-1">Username taken</p>}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background text-foreground"
-                placeholder="••••••••"
-                minLength={6}
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">Confirm Password</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background text-foreground"
-                placeholder="••••••••"
-                minLength={6}
-                required
-              />
-            </div>
-
-            {error && <div className="p-3 bg-destructive/10 border border-destructive text-destructive rounded-lg text-sm">{error}</div>}
-
-            <Button
-              type="submit"
-              disabled={loading || usernameAvailable === false}
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-            >
-
-              {loading ? 'Creating account...' : 'Sign Up'}
-            </Button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-muted-foreground text-sm">
-              Already have an account?{' '}
-              <Link href="/auth/signin" className="text-primary hover:underline font-medium">
-                Sign in
-              </Link>
-            </p>
-          </div>
+    <AuthShell title="Create your account" subtitle="Join detectives learning to spot AI-generated content">
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+          <label className="mb-2 block text-sm font-medium text-foreground">Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={inputClassName}
+            placeholder="you@example.com"
+            required
+          />
         </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-medium text-foreground">Username</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => handleUsernameChange(e.target.value)}
+            className={`${inputClassName} ${
+              usernameAvailable === true
+                ? 'border-emerald-500/60 focus:ring-emerald-500/30'
+                : usernameAvailable === false
+                  ? 'border-destructive/60 focus:ring-destructive/30'
+                  : ''
+            }`}
+            placeholder="your_username"
+            minLength={3}
+            required
+          />
+          {checking && <p className="mt-1.5 text-xs text-muted-foreground">Checking availability…</p>}
+          {usernameAvailable === true && <p className="mt-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">Username available</p>}
+          {usernameAvailable === false && <p className="mt-1.5 text-xs font-medium text-destructive">Username taken</p>}
+        </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-medium text-foreground">Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={inputClassName}
+            placeholder="••••••••"
+            minLength={6}
+            required
+          />
+        </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-medium text-foreground">Confirm password</label>
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className={inputClassName}
+            placeholder="••••••••"
+            minLength={6}
+            required
+          />
+        </div>
+
+        {error && (
+          <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+            {error}
+          </div>
+        )}
+
+        <Button type="submit" disabled={loading || usernameAvailable === false} size="lg" className="h-11 w-full text-base">
+          {loading ? 'Creating account…' : 'Sign up'}
+        </Button>
+      </form>
+
+      <div className="mt-8 text-center text-sm text-muted-foreground">
+        Already have an account?{' '}
+        <Link href="/auth/signin" className="font-semibold text-primary hover:underline">
+          Sign in
+        </Link>
       </div>
-    </main>
+    </AuthShell>
   )
 }

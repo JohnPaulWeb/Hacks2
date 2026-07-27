@@ -5,6 +5,10 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/lib/auth-context'
 import { Button } from '@/components/ui/button'
+import { AuthShell } from '@/components/auth-shell'
+
+const inputClassName =
+  'w-full rounded-lg border border-border bg-background/80 px-4 py-2.5 text-foreground shadow-sm transition placeholder:text-muted-foreground/70 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50'
 
 export default function SignInPage() {
   const router = useRouter()
@@ -30,60 +34,49 @@ export default function SignInPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md">
-        <div className="bg-card rounded-lg shadow-lg p-8 border border-border">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-primary mb-2">Spot the Bot</h1>
-            <p className="text-muted-foreground">Master AI Detection in 5 Minutes Daily</p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background text-foreground"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-background text-foreground"
-                placeholder="••••••••"
-                required
-              />
-            </div>
-
-            {error && <div className="p-3 bg-destructive/10 border border-destructive text-destructive rounded-lg text-sm">{error}</div>}
-
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-            >
-              {loading ? 'Signing in...' : 'Sign In'}
-            </Button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-muted-foreground text-sm">
-              Don&apos;t have an account?{' '}
-              <Link href="/auth/signup" className="text-primary hover:underline font-medium">
-                Sign up
-              </Link>
-            </p>
-          </div>
+    <AuthShell title="Welcome back" subtitle="Sign in to continue your daily AI detection training">
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+          <label className="mb-2 block text-sm font-medium text-foreground">Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={inputClassName}
+            placeholder="you@example.com"
+            required
+          />
         </div>
+
+        <div>
+          <label className="mb-2 block text-sm font-medium text-foreground">Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={inputClassName}
+            placeholder="••••••••"
+            required
+          />
+        </div>
+
+        {error && (
+          <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+            {error}
+          </div>
+        )}
+
+        <Button type="submit" disabled={loading} size="lg" className="h-11 w-full text-base">
+          {loading ? 'Signing in…' : 'Sign in'}
+        </Button>
+      </form>
+
+      <div className="mt-8 text-center text-sm text-muted-foreground">
+        Don&apos;t have an account?{' '}
+        <Link href="/auth/signup" className="font-semibold text-primary hover:underline">
+          Create one
+        </Link>
       </div>
-    </main>
+    </AuthShell>
   )
 }

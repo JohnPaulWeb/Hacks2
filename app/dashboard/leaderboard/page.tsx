@@ -4,6 +4,7 @@ import { useAuth } from '@/lib/auth-context'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { Trophy, Zap, Target } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import type { Database } from '@/lib/supabase'
 
 type LeaderboardEntry = Database['public']['Tables']['leaderboard_cache']['Row']
@@ -85,9 +86,10 @@ export default function LeaderboardPage() {
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex flex-1 items-center justify-center">
         <div className="text-center">
-          <div className="text-2xl font-bold text-primary mb-2">Loading Leaderboard...</div>
+          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <p className="text-sm font-medium text-muted-foreground">Loading leaderboard…</p>
         </div>
       </div>
     )
@@ -96,22 +98,23 @@ export default function LeaderboardPage() {
   const topEntries = entries.slice(0, 10)
 
   return (
-    <div className="flex-1 flex flex-col">
-      {/* Header */}
-      <section className="bg-gradient-to-r from-secondary/10 to-accent/10 border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 py-12">
-          <div className="flex items-center gap-3 mb-2">
-            <Trophy className="w-8 h-8 text-secondary" />
-            <h1 className="text-4xl font-bold text-foreground">Leaderboard</h1>
+    <div className="flex flex-1 flex-col">
+      <section className="relative overflow-hidden border-b border-border/80">
+        <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 via-transparent to-accent/10" />
+        <div className="relative mx-auto max-w-7xl px-4 py-10 sm:py-12">
+          <div className="mb-2 flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-secondary/15 text-secondary">
+              <Trophy className="h-6 w-6" />
+            </div>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Leaderboard</h1>
           </div>
-          <p className="text-muted-foreground text-lg">Top AI detectives compete here</p>
+          <p className="text-lg text-muted-foreground">Top AI detectives ranked by performance</p>
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto w-full px-4 py-12">
-        {/* Your Rank Card */}
+      <div className="mx-auto w-full max-w-7xl px-4 py-10">
         {userRank && (
-          <div className="mb-12 bg-gradient-to-r from-primary/20 to-secondary/20 border border-primary/30 rounded-lg p-6">
+          <div className="surface-card mb-10 border-primary/20 bg-gradient-to-r from-primary/5 to-secondary/5 p-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div>
                 <p className="text-muted-foreground text-sm mb-1">Your Rank</p>
@@ -136,42 +139,31 @@ export default function LeaderboardPage() {
           </div>
         )}
 
-        {/* Sort Buttons */}
-        <div className="flex gap-2 mb-8">
-          <button
-            onClick={() => setSortBy('xp')}
-            className={`px-4 py-2 rounded-lg font-medium transition ${
-              sortBy === 'xp'
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-muted text-muted-foreground hover:bg-muted/80'
-            }`}
-          >
-            Total XP
-          </button>
-          <button
-            onClick={() => setSortBy('accuracy')}
-            className={`px-4 py-2 rounded-lg font-medium transition ${
-              sortBy === 'accuracy'
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-muted text-muted-foreground hover:bg-muted/80'
-            }`}
-          >
-            Accuracy
-          </button>
-          <button
-            onClick={() => setSortBy('streak')}
-            className={`px-4 py-2 rounded-lg font-medium transition ${
-              sortBy === 'streak'
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-muted text-muted-foreground hover:bg-muted/80'
-            }`}
-          >
-            Streak
-          </button>
+        <div className="mb-8 inline-flex rounded-xl border border-border bg-muted/40 p-1">
+          {(
+            [
+              ['xp', 'Total XP'],
+              ['accuracy', 'Accuracy'],
+              ['streak', 'Streak'],
+            ] as const
+          ).map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setSortBy(key)}
+              className={cn(
+                'rounded-lg px-4 py-2 text-sm font-medium transition-all',
+                sortBy === key
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground',
+              )}
+            >
+              {label}
+            </button>
+          ))}
         </div>
 
-        {/* Leaderboard Table */}
-        <div className="bg-card border border-border rounded-lg overflow-hidden">
+        <div className="surface-card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>

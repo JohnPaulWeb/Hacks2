@@ -1,7 +1,14 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
+import { Plus_Jakarta_Sans } from 'next/font/google'
 import { AuthProvider } from '@/lib/auth-context'
 import './globals.css'
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-jakarta',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Spot the Bot - Master AI Detection',
@@ -42,8 +49,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="bg-background">
-      <body className="antialiased bg-background text-foreground">
+    <html lang="en" className={`${plusJakarta.variable} bg-background`}>
+      <body className="min-h-screen font-sans antialiased bg-background text-foreground">
         <AuthProvider>
           {children}
         </AuthProvider>
