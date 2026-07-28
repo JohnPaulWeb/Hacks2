@@ -48,33 +48,33 @@
 
 :root {
   color-scheme: light;
-  --background: #FFFFFF;
+  --background: #F4F7FB;
   --foreground: #0F172A;
-  --card: #F8FAFC;
+  --card: #FFFFFF;
   --card-foreground: #0F172A;
   --popover: #FFFFFF;
   --popover-foreground: #0F172A;
-  --primary: #3B82F6;
+  --primary: #1D4ED8;
   --primary-foreground: #FFFFFF;
-  --secondary: #EC4899;
+  --secondary: #0F766E;
   --secondary-foreground: #FFFFFF;
-  --muted: #E2E8F0;
-  --muted-foreground: #64748B;
-  --accent: #F59E0B;
+  --muted: #E8EEF4;
+  --muted-foreground: #5B6B7C;
+  --accent: #C2410C;
   --accent-foreground: #FFFFFF;
-  --destructive: #EF4444;
-  --border: #E2E8F0;
-  --input: #E2E8F0;
-  --ring: #3B82F6;
-  --chart-1: #3B82F6;
-  --chart-2: #EC4899;
-  --chart-3: #F59E0B;
-  --chart-4: #10B981;
-  --chart-5: #8B5CF6;
-  --radius: 0.625rem;
+  --destructive: #DC2626;
+  --border: #D8E0EA;
+  --input: #D8E0EA;
+  --ring: #1D4ED8;
+  --chart-1: #1D4ED8;
+  --chart-2: #0F766E;
+  --chart-3: #C2410C;
+  --chart-4: #059669;
+  --chart-5: #7C3AED;
+  --radius: 0.75rem;
   --sidebar: #FFFFFF;
   --sidebar-foreground: #0F172A;
-  --sidebar-primary: #3B82F6;
+  --sidebar-primary: #1D4ED8;
   --sidebar-primary-foreground: #FFFFFF;
   --sidebar-accent: #F1F5F9;
   --sidebar-accent-foreground: #0F172A;
@@ -84,27 +84,27 @@
 
 .dark {
   color-scheme: dark;
-  --background: #0F172A;
-  --foreground: #F1F5F9;
-  --card: #1E293B;
-  --card-foreground: #F1F5F9;
-  --popover: #1E293B;
-  --popover-foreground: #F1F5F9;
+  --background: #070B14;
+  --foreground: #E8EDF5;
+  --card: #111827;
+  --card-foreground: #E8EDF5;
+  --popover: #111827;
+  --popover-foreground: #E8EDF5;
   --primary: #60A5FA;
-  --primary-foreground: #0F172A;
-  --secondary: #F472B6;
-  --secondary-foreground: #0F172A;
-  --muted: #334155;
+  --primary-foreground: #0B1220;
+  --secondary: #2DD4BF;
+  --secondary-foreground: #042F2E;
+  --muted: #1F2937;
   --muted-foreground: #94A3B8;
-  --accent: #FBBF24;
-  --accent-foreground: #0F172A;
+  --accent: #FB923C;
+  --accent-foreground: #0B1220;
   --destructive: #F87171;
-  --border: #334155;
-  --input: #475569;
+  --border: #243044;
+  --input: #334155;
   --ring: #60A5FA;
   --chart-1: #60A5FA;
-  --chart-2: #F472B6;
-  --chart-3: #FBBF24;
+  --chart-2: #2DD4BF;
+  --chart-3: #FB923C;
   --chart-4: #34D399;
   --chart-5: #A78BFA;
   --sidebar: #1E293B;
@@ -120,27 +120,27 @@
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
     color-scheme: dark;
-    --background: #0F172A;
-    --foreground: #F1F5F9;
-    --card: #1E293B;
-    --card-foreground: #F1F5F9;
-    --popover: #1E293B;
-    --popover-foreground: #F1F5F9;
+    --background: #070B14;
+    --foreground: #E8EDF5;
+    --card: #111827;
+    --card-foreground: #E8EDF5;
+    --popover: #111827;
+    --popover-foreground: #E8EDF5;
     --primary: #60A5FA;
-    --primary-foreground: #0F172A;
-    --secondary: #F472B6;
-    --secondary-foreground: #0F172A;
-    --muted: #334155;
+    --primary-foreground: #0B1220;
+    --secondary: #2DD4BF;
+    --secondary-foreground: #042F2E;
+    --muted: #1F2937;
     --muted-foreground: #94A3B8;
-    --accent: #FBBF24;
-    --accent-foreground: #0F172A;
+    --accent: #FB923C;
+    --accent-foreground: #0B1220;
     --destructive: #F87171;
-    --border: #334155;
-    --input: #475569;
+    --border: #243044;
+    --input: #334155;
     --ring: #60A5FA;
     --chart-1: #60A5FA;
-    --chart-2: #F472B6;
-    --chart-3: #FBBF24;
+    --chart-2: #2DD4BF;
+    --chart-3: #FB923C;
     --chart-4: #34D399;
     --chart-5: #A78BFA;
     --sidebar: #1E293B;
@@ -172,6 +172,19 @@
 
 @layer utilities {
   .surface-card {
-    @apply rounded-xl border border-border/80 bg-card/90 shadow-sm backdrop-blur-sm transition-shadow duration-200 hover:shadow-md;
+    @apply rounded-2xl border border-border/80 bg-card/95 shadow-sm shadow-black/[0.03] backdrop-blur-sm transition-[box-shadow,border-color,transform] duration-200 hover:border-border hover:shadow-md dark:shadow-black/20;
+  }
+
+  .surface-interactive {
+    @apply rounded-2xl border border-border/80 bg-card/95 shadow-sm shadow-black/[0.03] backdrop-blur-sm transition-[box-shadow,border-color,transform] duration-200 hover:border-border hover:shadow-md hover:-translate-y-0.5 dark:shadow-black/20;
+  }
+
+  .prose-list li {
+    @apply flex items-start gap-3 text-sm leading-relaxed text-foreground;
+  }
+
+  .prose-list li::before {
+    content: '';
+    @apply mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary;
   }
 }

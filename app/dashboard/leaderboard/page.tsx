@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { Trophy, Zap, Target } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { LoadingState } from '@/components/loading-state'
+import { PageContent, PageHeader } from '@/components/page-header'
 import type { Database } from '@/lib/supabase'
 
 type LeaderboardEntry = Database['public']['Tables']['leaderboard_cache']['Row']
@@ -85,34 +87,22 @@ export default function LeaderboardPage() {
   }, [sortBy, profile])
 
   if (loading) {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <div className="text-center">
-          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-          <p className="text-sm font-medium text-muted-foreground">Loading leaderboard…</p>
-        </div>
-      </div>
-    )
+    return <LoadingState label="Loading leaderboard…" />
   }
 
   const topEntries = entries.slice(0, 10)
 
   return (
     <div className="flex flex-1 flex-col">
-      <section className="relative overflow-hidden border-b border-border/80">
-        <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 via-transparent to-accent/10" />
-        <div className="relative mx-auto max-w-7xl px-4 py-10 sm:py-12">
-          <div className="mb-2 flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-secondary/15 text-secondary">
-              <Trophy className="h-6 w-6" />
-            </div>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Leaderboard</h1>
-          </div>
-          <p className="text-lg text-muted-foreground">Top AI detectives ranked by performance</p>
-        </div>
-      </section>
+      <PageHeader
+        eyebrow="Community"
+        title="Leaderboard"
+        description="Top AI detectives ranked by performance."
+        icon={Trophy}
+        tone="secondary"
+      />
 
-      <div className="mx-auto w-full max-w-7xl px-4 py-10">
+      <PageContent>
         {userRank && (
           <div className="surface-card mb-10 border-primary/20 bg-gradient-to-r from-primary/5 to-secondary/5 p-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -238,7 +228,7 @@ export default function LeaderboardPage() {
             <p className="text-muted-foreground mb-4">No players yet. Be the first!</p>
           </div>
         )}
-      </div>
+      </PageContent>
     </div>
   )
 }

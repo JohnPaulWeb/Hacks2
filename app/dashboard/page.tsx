@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Zap, Flame, Trophy, Target, Award, BookOpen, ArrowRight } from 'lucide-react'
+import { PageContent, PageHeader, SectionTitle } from '@/components/page-header'
+import { Zap, Flame, Trophy, Target, Award, BookOpen, ArrowRight, LayoutDashboard } from 'lucide-react'
 import type { Database } from '@/lib/supabase'
 
 export default function DashboardPage() {
@@ -52,20 +53,15 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <section className="relative overflow-hidden border-b border-border/80">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-transparent to-secondary/10" />
-        <div className="relative mx-auto max-w-7xl px-4 py-10 sm:py-14">
-          <p className="mb-2 text-sm font-medium uppercase tracking-wider text-primary">Daily training</p>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Welcome back, {profile?.display_name}
-          </h1>
-          <p className="mt-2 max-w-xl text-lg text-muted-foreground">
-            Sharpen your instincts with today&apos;s quiz and keep your streak alive.
-          </p>
-        </div>
-      </section>
+      <PageHeader
+        eyebrow="Daily training"
+        title={`Welcome back, ${profile?.display_name}`}
+        description="Sharpen your instincts with today's quiz and keep your streak alive."
+        icon={LayoutDashboard}
+        tone="primary"
+      />
 
-      <div className="mx-auto w-full max-w-7xl flex-1 px-4 py-10">
+      <PageContent>
         <div className="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="surface-card p-6">
             <div className="mb-4 flex items-center justify-between">
@@ -143,11 +139,8 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <section className="mb-10">
-          <div className="mb-5 flex items-end justify-between gap-4">
-            <h2 className="text-xl font-bold tracking-tight text-foreground">Achievements</h2>
-          </div>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6 lg:gap-4">
+        <SectionTitle title="Achievements" />
+        <div className="mb-10 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6 lg:gap-4">
             {badges.map((badge) => (
               <div key={badge.id} className="surface-card p-4 text-center">
                 <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-accent/15 text-accent">
@@ -157,12 +150,12 @@ export default function DashboardPage() {
                 <p className="text-xs leading-relaxed text-muted-foreground">{badge.description}</p>
               </div>
             ))}
-          </div>
-        </section>
+        </div>
 
+        <SectionTitle title="Explore" />
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Link href="/dashboard/arena" className="group block">
-            <div className="surface-card h-full p-6 group-hover:border-primary/40">
+            <div className="surface-interactive h-full p-6 group-hover:border-primary/40">
               <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
                 <Zap className="h-5 w-5" />
               </div>
@@ -171,7 +164,7 @@ export default function DashboardPage() {
             </div>
           </Link>
           <Link href="/dashboard/leaderboard" className="group block">
-            <div className="surface-card h-full p-6 group-hover:border-secondary/40">
+            <div className="surface-interactive h-full p-6 group-hover:border-secondary/40">
               <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-secondary/10 text-secondary">
                 <Trophy className="h-5 w-5" />
               </div>
@@ -180,7 +173,7 @@ export default function DashboardPage() {
             </div>
           </Link>
           <Link href="/dashboard/guide" className="group block">
-            <div className="surface-card h-full p-6 group-hover:border-accent/40">
+            <div className="surface-interactive h-full p-6 group-hover:border-accent/40">
               <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent">
                 <BookOpen className="h-5 w-5" />
               </div>
@@ -189,7 +182,7 @@ export default function DashboardPage() {
             </div>
           </Link>
         </section>
-      </div>
+      </PageContent>
     </div>
   )
 }

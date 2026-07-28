@@ -40,7 +40,7 @@ export function Navigation() {
           </div>
           <div>
             <div className="text-base font-bold leading-none tracking-tight text-foreground">Spot the Bot</div>
-            <div className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">AI detective</div>
+            <div className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Media literacy</div>
           </div>
         </Link>
 

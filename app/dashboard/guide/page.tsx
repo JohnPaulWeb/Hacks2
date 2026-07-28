@@ -1,6 +1,9 @@
 'use client'
 
-import { BookOpen, Brain, Eye, Lightbulb } from 'lucide-react'
+import { BookOpen, Brain, ChevronDown, Eye, Lightbulb } from 'lucide-react'
+import Link from 'next/link'
+import { PageContent, PageHeader, SectionTitle } from '@/components/page-header'
+import { Button } from '@/components/ui/button'
 
 const guides = [
   {
@@ -62,7 +65,7 @@ const tips = [
   {
     title: 'Trust Your Gut (Sometimes)',
     description:
-      'AI-generated text often feels "off" even if you can&apos;t pinpoint why. Intuition combined with analysis is powerful.',
+      'AI-generated text often feels "off" even if you can\'t pinpoint why. Intuition combined with analysis is powerful.',
   },
   {
     title: 'Look for Context',
@@ -86,124 +89,100 @@ const tips = [
   },
 ]
 
+const faqs = [
+  {
+    q: 'How often should I play?',
+    a: 'Play daily to maintain your streak and build your AI detection skills. Each quiz takes about 5 minutes, making it perfect for a quick daily challenge.',
+  },
+  {
+    q: 'What happens if I miss a day?',
+    a: "Your streak will reset to 0 if you miss a day. Don't worry though—streaks are meant to motivate you, and you can always start a new one!",
+  },
+  {
+    q: 'How is XP calculated?',
+    a: 'You earn 10 XP per correct answer. Additionally, your daily streak acts as a multiplier—a 5-day streak means each correct answer is worth 50 XP (10 × 5).',
+  },
+  {
+    q: "Can I retake yesterday's quiz?",
+    a: 'Currently, you can only take the daily quiz once per day. Previous quizzes are archived for your reference.',
+  },
+  {
+    q: 'How do I earn badges?',
+    a: 'Badges unlock automatically when you reach certain milestones—first quiz, streaks, or XP thresholds. Check your profile to see progress.',
+  },
+]
+
 export default function GuidePage() {
   return (
-    <div className="flex-1 flex flex-col">
-      {/* Header */}
-      <section className="bg-gradient-to-r from-primary/10 to-accent/10 border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 py-12">
-          <div className="flex items-center gap-3 mb-2">
-            <BookOpen className="w-8 h-8 text-primary" />
-            <h1 className="text-4xl font-bold text-foreground">Learning Guide</h1>
-          </div>
-          <p className="text-muted-foreground text-lg">Master the art of detecting AI-generated content</p>
-        </div>
-      </section>
+    <div className="flex flex-1 flex-col">
+      <PageHeader
+        eyebrow="Media literacy"
+        title="Learning guide"
+        description="Techniques for spotting AI text, synthetic images, and misleading content."
+        icon={BookOpen}
+        tone="accent"
+      >
+        <Link href="/dashboard/arena">
+          <Button size="lg" className="h-11">
+            Practice in arena
+          </Button>
+        </Link>
+      </PageHeader>
 
-      <div className="max-w-7xl mx-auto w-full px-4 py-12">
-        {/* Main Guides */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          {guides.map((guide, idx) => {
+      <PageContent>
+        <div className="mb-14 grid grid-cols-1 gap-6 md:grid-cols-2">
+          {guides.map((guide) => {
             const Icon = guide.icon
             return (
-              <div key={idx} className="bg-card border border-border rounded-lg p-8">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="p-3 bg-primary/10 rounded-lg">
-                    <Icon className="w-6 h-6 text-primary" />
+              <article key={guide.title} className="surface-card p-8">
+                <div className="mb-5 flex items-center gap-4">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <Icon className="h-5 w-5" />
                   </div>
-                  <h2 className="text-2xl font-bold text-foreground">{guide.title}</h2>
+                  <h2 className="text-xl font-bold tracking-tight text-foreground">{guide.title}</h2>
                 </div>
-
-                <p className="text-muted-foreground mb-6">{guide.description}</p>
-
-                <ul className="space-y-3">
-                  {guide.points.map((point, pointIdx) => (
-                    <li key={pointIdx} className="flex items-start gap-3">
-                      <div className="w-2 h-2 rounded-full bg-secondary mt-2 flex-shrink-0"></div>
-                      <span className="text-foreground">{point}</span>
-                    </li>
+                <p className="mb-6 text-sm leading-relaxed text-muted-foreground">{guide.description}</p>
+                <ul className="prose-list space-y-3">
+                  {guide.points.map((point) => (
+                    <li key={point}>{point}</li>
                   ))}
                 </ul>
-              </div>
+              </article>
             )
           })}
         </div>
 
-        {/* Quick Tips */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-foreground mb-8">Pro Tips</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tips.map((tip, idx) => (
-              <div key={idx} className="bg-gradient-to-br from-secondary/10 to-accent/10 border border-border rounded-lg p-6">
-                <h3 className="text-xl font-bold text-foreground mb-2">{tip.title}</h3>
-                <p className="text-muted-foreground">{tip.description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        <SectionTitle title="Pro tips" description="Short habits that compound over daily play." />
+        <div className="mb-14 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {tips.map((tip) => (
+            <div
+              key={tip.title}
+              className="rounded-2xl border border-border/60 bg-gradient-to-br from-card to-muted/30 p-6"
+            >
+              <h3 className="mb-2 font-semibold text-foreground">{tip.title}</h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">{tip.description}</p>
+            </div>
+          ))}
+        </div>
 
-        {/* FAQ Section */}
-        <section>
-          <h2 className="text-3xl font-bold text-foreground mb-8">Frequently Asked Questions</h2>
-          <div className="space-y-4">
-            <details className="group bg-card border border-border rounded-lg p-6 cursor-pointer hover:border-primary/50 transition">
-              <summary className="flex items-center justify-between font-semibold text-foreground">
-                <span>How often should I play?</span>
-                <span className="transition group-open:rotate-180">▼</span>
+        <SectionTitle title="FAQ" />
+        <div className="space-y-3">
+          {faqs.map((faq) => (
+            <details
+              key={faq.q}
+              className="group surface-card overflow-hidden p-0 [&_summary::-webkit-details-marker]:hidden"
+            >
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 font-semibold text-foreground transition hover:bg-muted/30">
+                <span>{faq.q}</span>
+                <ChevronDown className="h-5 w-5 shrink-0 text-muted-foreground transition group-open:rotate-180" />
               </summary>
-              <p className="text-muted-foreground mt-4">
-                Play daily to maintain your streak and build your AI detection skills. Each quiz takes about 5 minutes,
-                making it perfect for a quick daily challenge.
+              <p className="border-t border-border/60 px-6 pb-5 pt-4 text-sm leading-relaxed text-muted-foreground">
+                {faq.a}
               </p>
             </details>
-
-            <details className="group bg-card border border-border rounded-lg p-6 cursor-pointer hover:border-primary/50 transition">
-              <summary className="flex items-center justify-between font-semibold text-foreground">
-                <span>What happens if I miss a day?</span>
-                <span className="transition group-open:rotate-180">▼</span>
-              </summary>
-              <p className="text-muted-foreground mt-4">
-                Your streak will reset to 0 if you miss a day. Don&apos;t worry though—streaks are meant to motivate
-                you, and you can always start a new one!
-              </p>
-            </details>
-
-            <details className="group bg-card border border-border rounded-lg p-6 cursor-pointer hover:border-primary/50 transition">
-              <summary className="flex items-center justify-between font-semibold text-foreground">
-                <span>How is XP calculated?</span>
-                <span className="transition group-open:rotate-180">▼</span>
-              </summary>
-              <p className="text-muted-foreground mt-4">
-                You earn 10 XP per correct answer. Additionally, your daily streak acts as a multiplier—a 5-day streak
-                means each correct answer is worth 50 XP (10 × 5). The longer your streak, the more XP you earn!
-              </p>
-            </details>
-
-            <details className="group bg-card border border-border rounded-lg p-6 cursor-pointer hover:border-primary/50 transition">
-              <summary className="flex items-center justify-between font-semibold text-foreground">
-                <span>Can I retake yesterday&apos;s quiz?</span>
-                <span className="transition group-open:rotate-180">▼</span>
-              </summary>
-              <p className="text-muted-foreground mt-4">
-                Currently, you can only take the daily quiz once per day. Previous quizzes are archived for your
-                reference. In future updates, we may add the ability to review past quizzes.
-              </p>
-            </details>
-
-            <details className="group bg-card border border-border rounded-lg p-6 cursor-pointer hover:border-primary/50 transition">
-              <summary className="flex items-center justify-between font-semibold text-foreground">
-                <span>How do I earn badges?</span>
-                <span className="transition group-open:rotate-180">▼</span>
-              </summary>
-              <p className="text-muted-foreground mt-4">
-                Badges unlock automatically when you reach certain milestones. Examples include completing your first
-                quiz, maintaining a 7-day streak, or reaching specific XP thresholds. Check your profile to see which
-                badges you&apos;ve earned!
-              </p>
-            </details>
-          </div>
-        </section>
-      </div>
+          ))}
+        </div>
+      </PageContent>
     </div>
   )
 }

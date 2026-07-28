@@ -12,7 +12,7 @@ export function AuthShell({
 }) {
   return (
     <main className="min-h-screen grid lg:grid-cols-2 bg-background">
-      <section className="relative hidden lg:flex flex-col justify-between overflow-hidden bg-gradient-to-br from-primary via-primary/90 to-secondary p-12 text-primary-foreground">
+      <section className="relative hidden lg:flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#1e3a8a] via-primary to-secondary p-12 text-primary-foreground">
         <div
           className="pointer-events-none absolute inset-0 opacity-30"
           style={{

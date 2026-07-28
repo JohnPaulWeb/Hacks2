@@ -8,6 +8,8 @@ import type { ImageAnalysisReport, ExtendedQuizQuestion } from '@/lib/quiz'
 import { checkAndAwardBadges } from '@/lib/badges'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { LoadingState } from '@/components/loading-state'
+import { cn } from '@/lib/utils'
 import {
   Zap, CheckCircle, Upload, ImageIcon, Sparkles, ShieldCheck,
   Eye, AlertTriangle, RefreshCw, Maximize2, X, Crosshair, FileSearch,
@@ -271,49 +273,48 @@ export default function ArenaPage() {
   }
 
   if (loading) {
-    return (
-      <div className="flex-1 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-2xl font-bold text-primary mb-2">Loading Arena...</div>
-          <p className="text-muted-foreground">Preparing quiz and AI image detector</p>
-        </div>
-      </div>
-    )
+    return <LoadingState label="Loading arena…" hint="Preparing quiz and image inspector" />
   }
 
   return (
-    <div className="flex-1 flex flex-col bg-background">
-
-      {/* Header & Mode Switcher */}
-      <div className="border-b border-border bg-card/80 backdrop-blur sticky top-0 z-20 p-4">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+    <div className="flex flex-1 flex-col bg-background">
+      <div className="sticky top-0 z-20 border-b border-border/80 bg-card/90 backdrop-blur-md">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 p-4 md:flex-row">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-primary/10 rounded-xl text-primary border border-primary/20">
-              <Sparkles className="w-6 h-6 animate-pulse" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/15">
+              <Sparkles className="h-5 w-5" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-foreground">Spot the Bot Arena</h1>
-              <p className="text-xs text-muted-foreground">Challenge your AI detection skills &amp; inspect imported images</p>
+              <h1 className="text-lg font-bold tracking-tight text-foreground sm:text-xl">Arena</h1>
+              <p className="text-xs text-muted-foreground">Daily quiz &amp; image forensic lab</p>
             </div>
           </div>
-          <div className="flex bg-muted/60 p-1.5 rounded-xl border border-border w-full md:w-auto">
+          <div className="flex w-full rounded-xl border border-border/80 bg-muted/50 p-1 md:w-auto">
             <button
+              type="button"
               onClick={() => setArenaMode('quiz')}
-              className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold transition-all ${
-                arenaMode === 'quiz' ? 'bg-primary text-primary-foreground shadow-md' : 'text-muted-foreground hover:text-foreground'
-              }`}
+              className={cn(
+                'flex flex-1 items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all md:flex-none',
+                arenaMode === 'quiz'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground',
+              )}
             >
-              <Zap className="w-4 h-4" />
-              Daily Quiz Arena
+              <Zap className="h-4 w-4" />
+              Daily quiz
             </button>
             <button
+              type="button"
               onClick={() => setArenaMode('import')}
-              className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold transition-all ${
-                arenaMode === 'import' ? 'bg-accent text-accent-foreground shadow-md' : 'text-muted-foreground hover:text-foreground'
-              }`}
+              className={cn(
+                'flex flex-1 items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all md:flex-none',
+                arenaMode === 'import'
+                  ? 'bg-accent text-accent-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground',
+              )}
             >
-              <Upload className="w-4 h-4" />
-              Import &amp; Define Image
+              <Upload className="h-4 w-4" />
+              Image inspector
             </button>
           </div>
         </div>
@@ -592,35 +593,41 @@ export default function ArenaPage() {
               </div>
             </div>
           ) : results ? (
-            <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-primary/5 to-background p-4">
-              <div className="max-w-2xl w-full">
-                <div className="bg-card border border-border rounded-xl p-8 text-center shadow-lg">
-                  <h1 className="text-4xl font-bold text-foreground mb-2">Quiz Complete!</h1>
-                  <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl p-8 my-8">
-                    <div className="grid grid-cols-2 gap-8 mb-8">
-                      <div>
-                        <p className="text-muted-foreground text-sm mb-2">Accuracy</p>
-                        <p className="text-4xl font-bold text-primary">{results.accuracy}%</p>
-                        <p className="text-muted-foreground text-sm mt-2">{results.correct}/{results.total} correct</p>
-                      </div>
-                      <div>
-                        <p className="text-muted-foreground text-sm mb-2">XP Earned</p>
-                        <p className="text-4xl font-bold text-accent flex items-center justify-center gap-2">
-                          <Zap className="w-8 h-8" />{results.xp}
-                        </p>
-                      </div>
-                    </div>
-                    {results.accuracy >= 80 && (
-                      <div className="p-4 bg-secondary/20 border border-secondary rounded-lg text-secondary font-semibold">Outstanding! You&apos;re crushing it!</div>
-                    )}
-                    {results.accuracy >= 60 && results.accuracy < 80 && (
-                      <div className="p-4 bg-accent/20 border border-accent rounded-lg text-accent font-semibold">Good job! Keep practicing!</div>
-                    )}
+            <div className="flex flex-1 items-center justify-center p-6">
+              <div className="surface-card w-full max-w-2xl p-8 text-center sm:p-10">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Session complete</p>
+                <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Nice work!</h1>
+                <div className="my-8 grid grid-cols-2 gap-6 rounded-2xl border border-border/60 bg-muted/30 p-6">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Accuracy</p>
+                    <p className="mt-1 text-4xl font-bold tabular-nums text-primary">{results.accuracy}%</p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {results.correct}/{results.total} correct
+                    </p>
                   </div>
-                  <Link href="/dashboard">
-                    <Button className="bg-primary text-primary-foreground w-full py-6 text-base font-bold">Back to Dashboard</Button>
-                  </Link>
+                  <div>
+                    <p className="text-sm text-muted-foreground">XP earned</p>
+                    <p className="mt-1 flex items-center justify-center gap-2 text-4xl font-bold tabular-nums text-accent">
+                      <Zap className="h-8 w-8" />
+                      {results.xp}
+                    </p>
+                  </div>
                 </div>
+                {results.accuracy >= 80 && (
+                  <div className="mb-4 rounded-xl border border-secondary/30 bg-secondary/10 px-4 py-3 text-sm font-semibold text-secondary">
+                    Outstanding — you&apos;re crushing it!
+                  </div>
+                )}
+                {results.accuracy >= 60 && results.accuracy < 80 && (
+                  <div className="mb-4 rounded-xl border border-accent/30 bg-accent/10 px-4 py-3 text-sm font-semibold text-accent">
+                    Solid run — keep practicing!
+                  </div>
+                )}
+                <Link href="/dashboard">
+                  <Button size="lg" className="h-11 w-full">
+                    Back to dashboard
+                  </Button>
+                </Link>
               </div>
             </div>
           ) : currentQuestion ? (
