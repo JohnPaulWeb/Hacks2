@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth-context'
 
@@ -21,8 +22,15 @@ export default function Page() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="text-center">
-        <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/20">
-          <div className="h-7 w-7 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="mx-auto mb-6 overflow-hidden rounded-2xl ring-1 ring-primary/20">
+          <Image
+            src="/ofc.jpg"
+            alt="Spot the Bot"
+            width={112}
+            height={112}
+            priority
+            className="h-28 w-28 object-cover"
+          />
         </div>
         <div className="text-2xl font-bold tracking-tight text-foreground">Spot the Bot</div>
         <p className="mt-2 text-sm text-muted-foreground">Loading your session…</p>

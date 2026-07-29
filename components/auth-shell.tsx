@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { ScanSearch, Shield, Sparkles, Trophy } from 'lucide-react'
+import Image from 'next/image'
+import { Shield, Sparkles, Trophy } from 'lucide-react'
 
 export function AuthShell({
   title,
@@ -22,8 +23,15 @@ export function AuthShell({
         />
         <div className="relative z-10">
           <Link href="/auth/signin" className="inline-flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/25 backdrop-blur">
-              <ScanSearch className="h-6 w-6" strokeWidth={2.25} />
+            <div className="h-11 w-11 overflow-hidden rounded-xl ring-1 ring-white/25">
+              <Image
+                src="/ofc.jpg"
+                alt="Spot the Bot logo"
+                width={88}
+                height={88}
+                priority
+                className="h-full w-full object-cover"
+              />
             </div>
             <span className="text-xl font-semibold tracking-tight">Spot the Bot</span>
           </Link>
@@ -58,13 +66,30 @@ export function AuthShell({
       <section className="flex flex-col justify-center p-6 sm:p-10 lg:p-14">
         <div className="mx-auto w-full max-w-md">
           <div className="mb-8 lg:hidden text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/20">
-              <ScanSearch className="h-7 w-7" strokeWidth={2.25} />
+            <div className="mx-auto mb-4 h-12 w-12 overflow-hidden rounded-xl ring-1 ring-primary/20">
+              <Image
+                src="/ofc.jpg"
+                alt="Spot the Bot logo"
+                width={96}
+                height={96}
+                priority
+                className="h-full w-full object-cover"
+              />
             </div>
             <p className="text-sm font-semibold text-primary">Spot the Bot</p>
           </div>
           <div className="rounded-2xl border border-border/80 bg-card/80 p-8 shadow-xl shadow-primary/5 backdrop-blur-sm">
-            <div className="mb-8 text-center lg:text-left">
+            <div className="mb-8 text-center">
+              <div className="mx-auto mb-6 h-28 w-28 overflow-hidden rounded-2xl ring-1 ring-primary/20 shadow-lg shadow-primary/10">
+                <Image
+                  src="/ofc.jpg"
+                  alt="Spot the Bot logo"
+                  width={224}
+                  height={224}
+                  priority
+                  className="h-full w-full object-cover"
+                />
+              </div>
               <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">{title}</h1>
               <p className="mt-2 text-muted-foreground">{subtitle}</p>
             </div>
